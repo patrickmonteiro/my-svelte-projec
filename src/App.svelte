@@ -1,10 +1,14 @@
 <script lang="ts">
 	export let name: string;
+	export const description: string = 'Essa é uma descrição';
+	export const src: string = 'https://cdn.pixabay.com/photo/2014/10/30/21/41/tutankhamun-509752_1280.jpg';
+	export const alt: string = 'Egito'
 </script>
 
 <main>
 	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
+	<p>{description}</p>
+	<img {src} {alt} height="300px">
 </main>
 
 <style>
