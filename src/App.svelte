@@ -5,18 +5,17 @@ import type IUsuario from './interfaces/IUsuario';
 
 let valorInput = 'Patrick';
 
-let usuario: IUsuario = {
-  avatar_url: 'https://github.com/patrickmonteiro.png',
-  login: 'patrickmonteiro',
-  nome: 'Patrick Monteiro',
-  perfil_url: 'https://github.com/patrickmonteiro',
-  repositorios_publicos: 50,
-  seguidores: 100
-}
+let usuario: IUsuario = null
 
 function handleSubmit() {
-  
-  console.log(valorInput);
+  usuario = {
+    avatar_url: 'https://github.com/patrickmonteiro.png',
+    login: 'patrickmonteiro',
+    nome: 'Patrick Monteiro',
+    perfil_url: 'https://github.com/patrickmonteiro',
+    repositorios_publicos: 50,
+    seguidores: 100
+  }
 }
 </script>
 
@@ -32,6 +31,7 @@ function handleSubmit() {
       </form>
     </div>
   </header>
+  {#if usuario}
   <div class="card-usuario">
     <BarraSuperior />
     <div class="usuario">
@@ -59,6 +59,7 @@ function handleSubmit() {
       </div>
     </div>
   </div>
+  {/if}
 </div>
 
 <style>
