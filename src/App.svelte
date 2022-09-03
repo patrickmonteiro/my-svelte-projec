@@ -6,13 +6,17 @@ import type IUsuario from './interfaces/IUsuario';
 
 let usuario: IUsuario | null = null
 
+function definirUsuario(evento: CustomEvent<IUsuario | null>) {
+  usuario = evento.detail;
+}
+
 </script>
 
 <div class="app">
   <header>
     <Titulo />
     <div class="busca-usuario">
-      <Formulario bind:usuario />
+      <Formulario on:aoAlterarUsuario={definirUsuario} />
     </div>
   </header>
 

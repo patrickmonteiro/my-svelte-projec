@@ -1,35 +1,58 @@
 <script lang="ts">
+import { createEventDispatcher } from "svelte";
 import type IUsuario from "../interfaces/IUsuario";
+// import type IUsuario from "../interfaces/IUsuario";
 
 
-  let valorInput = 'Patrick';
-  export let usuario: IUsuario | null;
+  let valorInput = '';
+  let statusDeErro:null | Number = null;
+  // export let usuario: IUsuario | null;
+  const dispatch = createEventDispatcher<{
+    aoAlterarUsuario: IUsuario | null
+  }>();
 
   async function handleSubmit() {
     const response = await fetch(`https://api.github.com/users/${valorInput}`)
     const dadosUsuario = await response.json();
+    if (response.ok) {
+      dispatch('aoAlterarUsuario', {
+        avatar_url: dadosUsuario.avatar_url,
+        login: dadosUsuario.login,
+        nome: dadosUsuario.name,
+        perfil_url: dadosUsuario.html_url,
+        repositorios_publicos: dadosUsuario.public_repos,
+        seguidores: dadosUsuario.followers
+      })
+      statusDeErro = null
+    } else {
+      statusDeErro = response.status;
+      dispatch('aoAlterarUsuario', null)
+    }
 
     console.log(dadosUsuario);
-    usuario = {
-      avatar_url: dadosUsuario.avatar_url,
-      login: dadosUsuario.login,
-      nome: dadosUsuario.name,
-      perfil_url: dadosUsuario.html_url,
-      repositorios_publicos: dadosUsuario.public_repos,
-      seguidores: dadosUsuario.followers
-    }
   }
 </script>
 
 <form on:submit|preventDefault={handleSubmit}>
-    <input type="text" class="input" bind:value={valorInput}>
+    <input
+      type="text"
+      placeholder="Pesquise aqui o usuário"
+      class="input"
+      class:erro-input={statusDeErro === 404}
+      bind:value={valorInput}
+    >
+
+    {#if statusDeErro === 404 }
+      <span class="erro">Usuário não encontrado.</span>
+    {/if}
+
     <div class="botao-container">
         <button type="submit" class="botao">Buscar</button>
     </div>
 </form>
 
 <style>
-    .input {
+.input {
   padding: 15px 25px;
   width: calc(100% - 8.75rem);
   font-size: 1rem;
@@ -72,5 +95,20 @@ import type IUsuario from "../interfaces/IUsuario";
 }
 .botao:hover {
   background: #4590ff;
+}
+.erro {
+  position: absolute;
+  bottom: -25px;
+  left: 0;
+  font-style: italic;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 19px;
+  z-index: -1;
+  color: #ff003e;
+}
+
+.erro-input {
+  border: solid 1px #ff003e;
 }
 </style>
